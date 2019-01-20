@@ -41,10 +41,10 @@ int main(int argv, char** argc) {
 		if (clientSocket == INVALID_SOCKET) {//TODO}
 
 		}
-	char host[NI_MAXHOST];
-	char service[NI_MAXHOST];
-	//memset(host, 0, NI_MAXHOST) or
-	ZeroMemory(host, NI_MAXHOST);
+	char host[NI_MAXHOST];      //Client's remote name
+	char service[NI_MAXHOST];   //Service/port the client is connected on
+	
+	ZeroMemory(host, NI_MAXHOST); //memset(host, 0, NI_MAXHOST) or
 	ZeroMemory(service, NI_MAXHOST);
 
 	if (getnameinfo((sockaddr*)&client, sizeof(client), host, NI_MAXHOST, service, NI_MAXSERV, 0) == 0) {
@@ -59,6 +59,7 @@ int main(int argv, char** argc) {
 	//    While loop: accept and echo messages back to the client
 	char buf[4096];
 	char buf2[4096];
+	const char* over = " OVER ";
 	while (1) {
 		ZeroMemory(buf, 4096);
 		//    Wait for client to send data
@@ -74,6 +75,7 @@ int main(int argv, char** argc) {
 
 		//    Echo message back to client
 		send(clientSocket, buf, bytesRecieved + 1, 0);
+		send(clientSocket, over, 7, 0);
 
 	}
 	//    Close socket
